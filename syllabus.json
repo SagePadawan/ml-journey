@@ -1,0 +1,2047 @@
+[
+ {
+  "n": 0,
+  "code": null,
+  "label": "Stage 0",
+  "name": "Math foundations",
+  "weeks": "Weeks 1–3",
+  "why": "Every later derivation, from attention to scaling-law fits to DPO’s loss, is built from these pieces.",
+  "serves": null,
+  "hwt": "Mac",
+  "sec": null,
+  "tst": "Check every hand-derived gradient against finite differences in a test that runs automatically.",
+  "holds": "Most of ML is a few pieces of math used over and over: vectors and matrix multiplies, probability, derivatives, and lowering a loss by stepping downhill.",
+  "breaks": "Nothing breaks yet. Skipping this is what makes the attention and scaling-law derivations feel like magic later.",
+  "project": {
+   "title": "Regression from scratch",
+   "brief": "Using only NumPy, fit linear regression three ways, then logistic regression with gradients you derived on paper. Finish with PCA from the eigenvectors of a covariance matrix.",
+   "ms": [
+    "Derive the gradient of mean squared error by hand and check it with finite differences",
+    "Fit linear regression with the normal equations and with gradient descent; confirm they agree",
+    "Logistic regression on a 2-class dataset using your hand-derived cross-entropy gradient",
+    "Sweep 5 learning rates and plot the loss curves; find where training diverges",
+    "PCA on a small dataset from the covariance matrix’s eigenvectors; plot the first two components"
+   ]
+  },
+  "predict": "Before the sweep, guess the largest learning rate that won’t diverge.",
+  "explain": "Explain why cross-entropy is the negative log-likelihood of the data, using a coin-flip example.",
+  "revisit": "Nothing to revisit yet. Start the error log here.",
+  "folder": "stages/00-math-foundations",
+  "milestone": "Stage 0 · Math foundations",
+  "jobs": {
+   "roles": [
+    "Data scientist",
+    "ML engineer",
+    "Research scientist",
+    "Quantitative analyst"
+   ],
+   "work": [
+    "Tracing why a recommendation model’s gradients explode after a new feature ships, and fixing the math",
+    "Compressing millions of product embeddings with PCA before indexing them for search",
+    "Explaining to leadership why a demand forecast’s uncertainty widened this quarter"
+   ]
+  },
+  "concepts": [
+   "Vectors & matrices",
+   "Matrix multiplication",
+   "Eigenvectors & PCA",
+   "Derivatives & chain rule",
+   "Gradient descent",
+   "Probability",
+   "Maximum likelihood",
+   "Entropy & cross-entropy",
+   "Softmax"
+  ],
+  "readings": [
+   {
+    "title": "Essence of Linear Algebra",
+    "authors": "3Blue1Brown (Grant Sanderson)",
+    "year": 2016,
+    "url": "https://www.3blue1brown.com/topics/linear-algebra",
+    "core": true,
+    "note": "Visual intuition for vectors, matrices, determinants and eigenvectors. Watch before the textbook."
+   },
+   {
+    "title": "Mathematics for Machine Learning",
+    "authors": "Deisenroth, Faisal, Ong",
+    "year": 2020,
+    "url": "https://mml-book.github.io/",
+    "core": true,
+    "note": "Free textbook. Read chapters 2 to 7: linear algebra, matrix decompositions, vector calculus, probability and optimization."
+   },
+   {
+    "title": "The Matrix Calculus You Need for Deep Learning",
+    "authors": "Parr & Howard",
+    "year": 2018,
+    "url": "https://arxiv.org/abs/1802.01528",
+    "core": true,
+    "note": "Gradients of vector and matrix expressions, written for people who build networks."
+   },
+   {
+    "title": "Seeing Theory",
+    "authors": "Brown University",
+    "year": 2016,
+    "url": "https://seeing-theory.brown.edu/",
+    "core": false,
+    "note": "Interactive visual introduction to probability and statistics. The site is archived but still available."
+   },
+   {
+    "title": "CS229 lecture notes",
+    "authors": "Andrew Ng et al., Stanford",
+    "year": 2023,
+    "url": "https://cs229.stanford.edu/main_notes.pdf",
+    "core": false,
+    "note": "Linear and logistic regression, maximum likelihood and generalized linear models, derived step by step."
+   }
+  ]
+ },
+ {
+  "n": 1,
+  "code": null,
+  "label": "Stage 1",
+  "name": "Neural nets & autograd",
+  "weeks": "Weeks 4–5",
+  "why": "Autograd is the chain rule from Stage 0 turned into code, and every project after this trains something.",
+  "serves": null,
+  "hwt": "Mac",
+  "sec": "Saved PyTorch .pt files are pickles that can run code when loaded. Load downloaded weights with weights_only=True, or use safetensors.",
+  "tst": "Test shapes, gradients and a one-batch overfit. These three checks catch most model bugs.",
+  "holds": "A neural network is a differentiable program. Stack simple functions, measure the loss, and autograd gives you the gradient of everything.",
+  "breaks": "Autograd gives you gradients, not good training. Whether a model learns anything useful is a data and training-dynamics question, covered in Stages 2 and 4.",
+  "project": {
+   "title": "Micrograd replay",
+   "brief": "Rebuild a scalar autograd engine from memory, then use it to train a small MLP. Check every gradient against PyTorch.",
+   "ms": [
+    "Value class with +, *, tanh and a backward() that walks a topological sort",
+    "Gradient check: match PyTorch to 1e-6 on a random expression",
+    "Train a 2-layer MLP on a toy 2D dataset to >95% accuracy",
+    "Rewrite the training loop in PyTorch and confirm identical loss curves"
+   ]
+  },
+  "predict": "Before running backward(), compute one weight’s gradient by hand and write it down.",
+  "explain": "Explain why gradients are summed when a value feeds two operations.",
+  "revisit": "Redo your Stage 0 logistic regression as a one-neuron network in your engine. Do the gradients match your hand derivation?",
+  "folder": "stages/01-neural-nets-autograd",
+  "milestone": "Stage 1 · Neural nets & autograd",
+  "jobs": {
+   "roles": [
+    "ML engineer",
+    "Applied scientist",
+    "Framework engineer (PyTorch, JAX, MLX teams)"
+   ],
+   "work": [
+    "Writing a custom layer and its gradient for a ranking model, then proving it matches a reference implementation",
+    "Porting a production model between frameworks and showing outputs match to 1e-6",
+    "Building shared training pipelines that dozens of internal teams reuse"
+   ]
+  },
+  "concepts": [
+   "Tensors & shapes",
+   "MLP & activations",
+   "Autograd",
+   "Next-token loss",
+   "Optimizers"
+  ],
+  "readings": [
+   {
+    "title": "Intro to backprop (micrograd)",
+    "authors": "Andrej Karpathy",
+    "year": 2022,
+    "url": "https://www.youtube.com/watch?v=VMj-3S1tku0",
+    "core": true,
+    "note": "Builds autograd from scratch in about two hours. The template for this whole syllabus: build first, then explain."
+   },
+   {
+    "title": "Neural Networks: Zero to Hero",
+    "authors": "Andrej Karpathy",
+    "year": 2023,
+    "url": "https://karpathy.ai/zero-to-hero.html",
+    "core": false,
+    "note": "The video series that leads into the GPT build in Stage 3."
+   },
+   {
+    "title": "Adam",
+    "authors": "Kingma & Ba",
+    "year": 2014,
+    "url": "https://arxiv.org/abs/1412.6980",
+    "core": false,
+    "note": "The optimizer behind nearly every model on this map. Skim the update rule and bias correction."
+   },
+   {
+    "title": "Deep Learning (book)",
+    "authors": "Goodfellow, Bengio, Courville",
+    "year": 2016,
+    "url": "https://www.deeplearningbook.org/",
+    "core": false,
+    "note": "Free reference text. Chapter 6 (feedforward networks) and chapter 8 (optimization) pair with this stage."
+   }
+  ]
+ },
+ {
+  "n": 2,
+  "code": null,
+  "label": "Stage 2",
+  "name": "Data & evaluation",
+  "weeks": "Weeks 6–7",
+  "why": "Comes before any big model, so every number you report from here on has an honest split, a baseline and an error bar.",
+  "serves": null,
+  "hwt": "Mac",
+  "sec": "Data leakage has a privacy twin: keep real people’s data out of public repos, and treat test sets that contain it as sensitive.",
+  "tst": "Write tests that fail if any example appears in two splits, if the schema changes, or if label balance shifts sharply.",
+  "holds": "A model is only as good as its data and the test that measures it. A clean held-out split, a strong baseline and an honest metric catch most bad conclusions.",
+  "breaks": "Benchmarks leak into training data, test sets get reused until they are overfit, and small score differences are often noise. A number without an error bar and a contamination check is a rumor.",
+  "project": {
+   "title": "Leak hunt",
+   "brief": "Train a simple classifier on a real dataset, then deliberately add four kinds of leakage and measure how much each one inflates the score. Finish by comparing two models with bootstrap confidence intervals and checking a benchmark for contamination.",
+   "ms": [
+    "Make train, validation and test splits; write down what the test set is for and lock it away",
+    "Train baselines (majority class, then logistic regression) and record their scores",
+    "Add leakage four ways: duplicates across splits, a target-derived feature, preprocessing fit on all data, and a time-order violation; measure each inflation",
+    "Compute bootstrap 95% intervals for two models and decide whether the gap is real",
+    "Check a small public benchmark against a text corpus for 13-gram overlap and report the contamination rate",
+    "Write pytest tests for your data pipeline (no example in two splits, schema and label checks) and have them run automatically on every push"
+   ]
+  },
+  "predict": "Guess which leak inflates accuracy the most before running any of them.",
+  "explain": "Explain to a non-engineer why a 0.5-point leaderboard gain may mean nothing.",
+  "revisit": "Re-run your Stage 1 MLP with a proper validation split. Was it overfitting?",
+  "folder": "stages/02-data-evaluation",
+  "milestone": "Stage 2 · Data & evaluation",
+  "jobs": {
+   "roles": [
+    "ML evaluation engineer",
+    "Data scientist",
+    "Data quality engineer",
+    "Responsible AI analyst",
+    "TPM for model launches"
+   ],
+   "work": [
+    "Owning the eval suite that must pass before any model release ships at an AI lab",
+    "Auditing a fraud model that looked 99% accurate and finding target leakage",
+    "Running contamination checks before a company publishes benchmark results",
+    "Writing the launch criteria (metrics, error bars, regressions) a program review signs off on"
+   ]
+  },
+  "concepts": [
+   "Train / val / test splits",
+   "Data leakage",
+   "Benchmark contamination",
+   "Baselines",
+   "Overfitting & generalization",
+   "Metrics",
+   "Error bars & bootstrap",
+   "Benchmarks",
+   "Distribution shift",
+   "Testing ML systems"
+  ],
+  "readings": [
+   {
+    "title": "Leakage and the Reproducibility Crisis in ML-based Science",
+    "authors": "Kapoor & Narayanan",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2207.07048",
+    "core": true,
+    "note": "A taxonomy of eight leakage types found across hundreds of published papers. Use it as your project checklist."
+   },
+   {
+    "title": "Do ImageNet Classifiers Generalize to ImageNet?",
+    "authors": "Recht et al.",
+    "year": 2019,
+    "url": "https://arxiv.org/abs/1902.10811",
+    "core": true,
+    "note": "Rebuilt the ImageNet test set and found every model scored lower. A lesson in test-set reuse and subtle shift."
+   },
+   {
+    "title": "Adding Error Bars to Evals",
+    "authors": "Evan Miller",
+    "year": 2024,
+    "url": "https://arxiv.org/abs/2411.00640",
+    "core": true,
+    "note": "How to report language-model eval results with standard errors, clustered questions and paired comparisons."
+   },
+   {
+    "title": "Beyond Accuracy: Behavioral Testing of NLP Models with CheckList",
+    "authors": "Ribeiro et al.",
+    "year": 2020,
+    "url": "https://arxiv.org/abs/2005.04118",
+    "core": true,
+    "note": "Invariance, directional and minimum-functionality tests for models, borrowed from software testing."
+   },
+   {
+    "title": "Datasheets for Datasets",
+    "authors": "Gebru et al.",
+    "year": 2018,
+    "url": "https://arxiv.org/abs/1803.09010",
+    "core": false,
+    "note": "Questions every dataset should answer: who made it, what is in it, and what it should not be used for."
+   },
+   {
+    "title": "HELM",
+    "authors": "Liang et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2211.09110",
+    "core": false,
+    "note": "Holistic Evaluation of Language Models. Many scenarios and many metrics instead of one leaderboard number."
+   },
+   {
+    "title": "MMLU",
+    "authors": "Hendrycks et al.",
+    "year": 2020,
+    "url": "https://arxiv.org/abs/2009.03300",
+    "core": false,
+    "note": "A widely used multiple-choice knowledge benchmark. Good for practicing contamination checks."
+   },
+   {
+    "title": "Time Travel in LLMs: Tracing Data Contamination",
+    "authors": "Golchin & Surdeanu",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2308.08493",
+    "core": false,
+    "note": "Methods for detecting whether a model has seen a benchmark during training."
+   },
+   {
+    "title": "The ML Test Score",
+    "authors": "Breck et al., Google",
+    "year": 2017,
+    "url": "https://research.google/pubs/pub46555/",
+    "core": false,
+    "note": "A 28-item rubric for testing data, models, infrastructure and monitoring in production ML."
+   },
+   {
+    "title": "Hidden Technical Debt in Machine Learning Systems",
+    "authors": "Sculley et al., Google",
+    "year": 2015,
+    "url": "https://proceedings.neurips.cc/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf",
+    "core": false,
+    "note": "Why the model is the small part of a production ML system, and where the hidden maintenance costs come from."
+   }
+  ]
+ },
+ {
+  "n": 14,
+  "code": "D",
+  "label": "Track D",
+  "name": "Ads & growth ML",
+  "weeks": "Weeks 8–11",
+  "why": "Needs only math and evaluation, so it starts right after Stage 2. It runs on tabular data, so your Mac is enough, and it gives the agency CRM a working lead-scoring model early.",
+  "serves": "the ad marketplace, the agency CRM",
+  "hwt": "Mac",
+  "sec": "Housing, job and credit ads have legal limits on targeting by protected traits and close stand-ins such as zip code. Check lookalike features for proxies.",
+  "tst": "Test feature code for leakage: assert that no feature uses information from after the moment of prediction.",
+  "holds": "Most business ML runs on tables, not text. Gradient-boosted trees on well-built features beat deep models on most tabular problems, and calibrated probabilities turn predictions into budget decisions.",
+  "breaks": "Prediction isn’t causation. A model that predicts who converts doesn’t tell you which ad caused the sale, and optimizing on observed clicks bakes in the platform’s own targeting. Proving that spend worked takes experiments or careful causal methods.",
+  "project": {
+   "title": "Ad marketplace campaign brain",
+   "brief": "Using a public ad dataset plus your agency’s own records, predict conversion, allocate a simulated budget across channels with a bandit, and estimate the true lift of one campaign. The lead-scoring model feeds the agency CRM.",
+   "ms": [
+    "Train logistic regression and gradient-boosted trees on a public click-through dataset; compare log loss and AUC with bootstrap intervals",
+    "Calibrate the better model and plot a reliability diagram; write down why calibration matters for bidding",
+    "Score your own past leads for likelihood to book, then check feature importances for leakage",
+    "Simulate 5 channels with hidden conversion rates; compare a fixed split, epsilon-greedy and Thompson sampling on total conversions",
+    "Design an A/B test for one real campaign: power analysis, sample size, and the analysis plan written before you see results",
+    "Estimate lift on a public uplift dataset with a two-model approach, and compare it with the naive difference"
+   ]
+  },
+  "predict": "Predict how many simulated days Thompson sampling needs to find the best channel.",
+  "explain": "Explain to a client why “people who saw the ad bought more” doesn’t prove the ad worked.",
+  "revisit": "Run your Stage 2 leakage checklist on the lead-scoring features. Which one would give away the outcome?",
+  "folder": "stages/track-d-ads-growth-ml",
+  "milestone": "Track D · Ads & growth ML",
+  "jobs": {
+   "roles": [
+    "Ads ranking ML engineer",
+    "Marketing data scientist",
+    "Experimentation platform engineer",
+    "Growth analyst",
+    "Ads measurement PM"
+   ],
+   "work": [
+    "Click-through-rate models that score billions of ad auctions a day at an ad platform",
+    "Geo-lift and holdout studies that prove a campaign’s return to a large advertiser",
+    "Marketing mix models that set a retailer’s quarterly budget across channels",
+    "Lead-scoring models inside enterprise CRMs that route sales teams to the best accounts"
+   ]
+  },
+  "concepts": [
+   "Gradient-boosted trees",
+   "Feature engineering",
+   "Calibration",
+   "CTR & conversion prediction",
+   "Recommendation & matching",
+   "Bandits",
+   "A/B testing & power",
+   "Causal inference & uplift",
+   "Attribution & media mix",
+   "Entity resolution"
+  ],
+  "readings": [
+   {
+    "title": "XGBoost",
+    "authors": "Chen & Guestrin",
+    "year": 2016,
+    "url": "https://arxiv.org/abs/1603.02754",
+    "core": true,
+    "note": "The scalable gradient-boosting system. Skim the method; use the library."
+   },
+   {
+    "title": "Why do tree-based models still outperform deep learning on tabular data?",
+    "authors": "Grinsztajn, Oyallon, Varoquaux",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2207.08815",
+    "core": true,
+    "note": "The evidence for starting with trees."
+   },
+   {
+    "title": "Trustworthy Online Controlled Experiments",
+    "authors": "Kohavi, Tang, Xu",
+    "year": 2020,
+    "url": "https://experimentguide.com/",
+    "core": true,
+    "note": "The standard book on A/B testing in practice."
+   },
+   {
+    "title": "A Tutorial on Thompson Sampling",
+    "authors": "Russo et al.",
+    "year": 2017,
+    "url": "https://arxiv.org/abs/1707.02038",
+    "core": true,
+    "note": "Bandits explained with worked examples."
+   },
+   {
+    "title": "On Calibration of Modern Neural Networks",
+    "authors": "Guo et al.",
+    "year": 2017,
+    "url": "https://arxiv.org/abs/1706.04599",
+    "core": false,
+    "note": "Why modern models are overconfident, and temperature scaling as a fix."
+   },
+   {
+    "title": "DLRM",
+    "authors": "Naumov et al.",
+    "year": 2019,
+    "url": "https://arxiv.org/abs/1906.00091",
+    "core": false,
+    "note": "Deep Learning Recommendation Model. How large ad and recommendation models are built."
+   },
+   {
+    "title": "Causal Inference: The Mixtape (online edition, now The Remix)",
+    "authors": "Scott Cunningham",
+    "year": 2021,
+    "url": "https://mixtape.scunning.com/",
+    "core": false,
+    "note": "Free, readable book on causal methods for observational data."
+   },
+   {
+    "title": "Causal Inference and Uplift Modeling: A Review",
+    "authors": "Gutierrez & Gérardy",
+    "year": 2017,
+    "url": "http://proceedings.mlr.press/v67/gutierrez17a.html",
+    "core": false,
+    "note": "Short survey of uplift methods, including the two-model approach in the project."
+   }
+  ]
+ },
+ {
+  "n": 3,
+  "code": null,
+  "label": "Stage 3",
+  "name": "Transformers & scaling laws",
+  "weeks": "Weeks 12–14",
+  "why": "You now have the math to derive attention and the evaluation habits to trust your own scaling fit.",
+  "serves": null,
+  "hwt": "Mac (PyTorch on MPS, or MLX)",
+  "sec": "Language models memorize rare training text, so anything private in your training data can come back out.",
+  "tst": "Test the causal mask (no token can see the future) and that loss on one tiny batch drops near zero.",
+  "holds": "Attention plus scale explains most recent language-model progress. Loss falls as a smooth power law in parameters, data and compute.",
+  "breaks": "Kaplan’s compute allocation was revised by Chinchilla, which found tokens matter about as much as parameters. Scaling laws count FLOPs and say nothing about how long a FLOP takes on real hardware.",
+  "project": {
+   "title": "Tiny GPT and a scaling sweep",
+   "brief": "Write a decoder-only transformer without nn.Transformer, train it on a small text corpus, then train five sizes and fit a power law to final loss.",
+   "ms": [
+    "Single-head causal self-attention with a visible mask test",
+    "Multi-head attention, MLP, residuals and LayerNorm assembled into blocks",
+    "Train to a validation loss that beats a bigram baseline by a wide margin",
+    "Train 5 model sizes on the same token budget and log FLOPs with 6·N·D",
+    "Fit loss vs parameters on a log-log plot and report the exponent"
+   ]
+  },
+  "predict": "Guess the fitted exponent and the size where your curve flattens before you fit anything.",
+  "explain": "Explain scaled dot-product attention, including the √dₖ, to someone who knows matrix multiplication.",
+  "revisit": "Report your validation loss across three seeds with a bootstrap interval. Is the gap over the bigram baseline real?",
+  "folder": "stages/03-transformers-scaling-laws",
+  "milestone": "Stage 3 · Transformers & scaling laws",
+  "jobs": {
+   "roles": [
+    "Research engineer (pretraining)",
+    "LLM engineer",
+    "Research scientist",
+    "AI compute capacity planner"
+   ],
+   "work": [
+    "Running small scaling-law sweeps that decide how big the next flagship model should be",
+    "Forecasting how many GPUs and weeks a training run needs, months in advance",
+    "Pretraining a domain model on a bank’s or hospital’s own text"
+   ]
+  },
+  "concepts": [
+   "Tokenization",
+   "Self-attention",
+   "Multi-head attention",
+   "Positional encoding",
+   "Residuals & LayerNorm",
+   "Scaling laws",
+   "Compute-optimal training"
+  ],
+  "readings": [
+   {
+    "title": "Attention Is All You Need",
+    "authors": "Vaswani et al.",
+    "year": 2017,
+    "url": "https://arxiv.org/abs/1706.03762",
+    "core": true,
+    "note": "The transformer paper. Read section 3 three times and re-derive the attention equation from a blank page."
+   },
+   {
+    "title": "Let’s build GPT",
+    "authors": "Andrej Karpathy",
+    "year": 2023,
+    "url": "https://www.youtube.com/watch?v=kCc8FmEb1nY",
+    "core": true,
+    "note": "Watch once, then rebuild without the video. The rebuild is the Stage 3 project."
+   },
+   {
+    "title": "Scaling Laws for Neural LMs",
+    "authors": "Kaplan et al.",
+    "year": 2020,
+    "url": "https://arxiv.org/abs/2001.08361",
+    "core": true,
+    "note": "The original power-law fits. Focus on the figures and the compute-allocation argument."
+   },
+   {
+    "title": "Chinchilla",
+    "authors": "Hoffmann et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2203.15556",
+    "core": true,
+    "note": "Training Compute-Optimal LLMs. Revises Kaplan: about 20 tokens per parameter."
+   },
+   {
+    "title": "nanochat (successor to nanoGPT)",
+    "authors": "Andrej Karpathy",
+    "year": 2025,
+    "url": "https://github.com/karpathy/nanochat",
+    "core": false,
+    "note": "Karpathy’s current compact reference for training a small chat model end to end. Diff your GPT against it. His older nanoGPT repo is now marked deprecated."
+   },
+   {
+    "title": "GPT-3",
+    "authors": "Brown et al.",
+    "year": 2020,
+    "url": "https://arxiv.org/abs/2005.14165",
+    "core": false,
+    "note": "Language Models are Few-Shot Learners. What scale bought in practice."
+   },
+   {
+    "title": "RoFormer (RoPE)",
+    "authors": "Su et al.",
+    "year": 2021,
+    "url": "https://arxiv.org/abs/2104.09864",
+    "core": false,
+    "note": "Rotary position embeddings, the default in most current open models."
+   },
+   {
+    "title": "Neural MT of Rare Words with Subword Units (BPE)",
+    "authors": "Sennrich, Haddow, Birch",
+    "year": 2015,
+    "url": "https://arxiv.org/abs/1508.07909",
+    "core": false,
+    "note": "Introduced byte-pair encoding for neural models. Short and readable."
+   },
+   {
+    "title": "Stanford CS336 (Spring 2026)",
+    "authors": "Liang & Hashimoto",
+    "year": 2026,
+    "url": "https://cs336.stanford.edu/",
+    "core": false,
+    "note": "Language Modeling from Scratch, with recorded lectures. Its five assignments make good deep-path versions of Stages 3, 5, 8 and 10."
+   }
+  ]
+ },
+ {
+  "n": 4,
+  "code": null,
+  "label": "Stage 4",
+  "name": "Training dynamics",
+  "weeks": "Weeks 15–16",
+  "why": "Follows the transformer because you now have a real model whose training you can break and fix.",
+  "serves": null,
+  "hwt": "Mac",
+  "sec": "A few bad training examples can plant a hidden trigger. Know where every training file came from.",
+  "tst": "Run the same short training twice with the same seed and assert the losses match. Unrepeatable runs hide real bugs.",
+  "holds": "Most training failures are recipe problems, not architecture problems. Learning rate, warmup, initialization, batch size and numeric precision decide whether a good model trains at all.",
+  "breaks": "Rules of thumb don’t transfer across scale. The best learning rate shifts as models grow, loss spikes show up mostly in big runs, and a run that looks fine on training loss can be quietly overfitting.",
+  "project": {
+   "title": "Break it, then fix it",
+   "brief": "Take your Stage 3 GPT and break training five ways. Diagnose each failure from the loss curve and gradient statistics alone, then fix it. End with a learning-rate sweep at two model widths.",
+   "ms": [
+    "Log loss, gradient norm, learning rate and weight norms every step to a dashboard such as TensorBoard",
+    "Break it five ways: learning rate 10× too high, no warmup, bad initialization, no gradient clipping, fp16 without loss scaling; screenshot each failure",
+    "Fix each one and write a one-line diagnosis rule per failure",
+    "Overfit one tiny batch to prove the model can learn, then add weight decay or dropout and show the train–validation gap shrink",
+    "Sweep the learning rate at two model widths and plot how the best value moves"
+   ]
+  },
+  "predict": "Predict whether the best learning rate goes up or down when you double model width.",
+  "explain": "Explain warmup to someone who has never trained a model.",
+  "revisit": "Do your Stage 3 scaling fits change when each size gets its own tuned learning rate?",
+  "folder": "stages/04-training-dynamics",
+  "milestone": "Stage 4 · Training dynamics",
+  "jobs": {
+   "roles": [
+    "Research engineer",
+    "ML infrastructure engineer",
+    "Training reliability engineer"
+   ],
+   "work": [
+    "Monitoring a multi-week run on thousands of GPUs and rewinding to a checkpoint after a loss spike",
+    "Tuning hyperparameters on small proxy models so settings transfer to the full-size run",
+    "Building the dashboards and alerts that catch divergence before it wastes a week of compute"
+   ]
+  },
+  "concepts": [
+   "Learning rate & schedules",
+   "Warmup",
+   "Initialization",
+   "Batch size",
+   "Gradient clipping",
+   "Mixed precision",
+   "Regularization",
+   "Loss spikes & instability",
+   "μP (hyperparameter transfer)"
+  ],
+  "readings": [
+   {
+    "title": "A Recipe for Training Neural Networks",
+    "authors": "Andrej Karpathy",
+    "year": 2019,
+    "url": "http://karpathy.github.io/2019/04/25/recipe/",
+    "core": true,
+    "note": "A practical debugging process: inspect data, overfit one batch, then add complexity one step at a time."
+   },
+   {
+    "title": "Deep Learning Tuning Playbook",
+    "authors": "Godbole et al., Google",
+    "year": 2023,
+    "url": "https://github.com/google-research/tuning_playbook",
+    "core": true,
+    "note": "How to tune learning rate, batch size and schedules systematically instead of by luck."
+   },
+   {
+    "title": "Mixed Precision Training",
+    "authors": "Micikevicius et al.",
+    "year": 2017,
+    "url": "https://arxiv.org/abs/1710.03740",
+    "core": true,
+    "note": "fp16 training with fp32 master weights and loss scaling. Read why gradients underflow."
+   },
+   {
+    "title": "Decoupled Weight Decay (AdamW)",
+    "authors": "Loshchilov & Hutter",
+    "year": 2017,
+    "url": "https://arxiv.org/abs/1711.05101",
+    "core": false,
+    "note": "Why weight decay should be separate from Adam’s gradient scaling."
+   },
+   {
+    "title": "Accurate, Large Minibatch SGD",
+    "authors": "Goyal et al.",
+    "year": 2017,
+    "url": "https://arxiv.org/abs/1706.02677",
+    "core": false,
+    "note": "Linear learning-rate scaling with batch size, plus gradual warmup."
+   },
+   {
+    "title": "Delving Deep into Rectifiers",
+    "authors": "He et al.",
+    "year": 2015,
+    "url": "https://arxiv.org/abs/1502.01852",
+    "core": false,
+    "note": "The initialization scheme that keeps ReLU networks trainable."
+   },
+   {
+    "title": "Tensor Programs V (μP)",
+    "authors": "Yang et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2203.03466",
+    "core": false,
+    "note": "Tuning large networks by tuning small ones. Skim the figures showing the best LR staying put across widths."
+   },
+   {
+    "title": "Dropout",
+    "authors": "Srivastava et al.",
+    "year": 2014,
+    "url": "https://jmlr.org/papers/v15/srivastava14a.html",
+    "core": false,
+    "note": "Randomly dropping units during training to reduce overfitting."
+   }
+  ]
+ },
+ {
+  "n": 5,
+  "code": null,
+  "label": "Stage 5",
+  "name": "Post-training",
+  "weeks": "Weeks 17–19",
+  "why": "Needs a pretrained model, training-dynamics instincts and evaluation discipline, which Stages 2 to 4 just gave you.",
+  "serves": null,
+  "hwt": "Mac with MLX for LoRA; a rented GPU makes DPO much faster",
+  "sec": "Preference tuning shapes safety behavior. Measure refusals and harmful outputs before and after tuning, not just helpfulness.",
+  "tst": "Keep a fixed set of prompts and check every new checkpoint against it before you keep it.",
+  "holds": "A pretrained model knows a lot but doesn’t follow instructions. Supervised fine-tuning teaches the format, and preference tuning (RLHF or DPO) pushes it toward answers people prefer, using a small fraction of pretraining compute.",
+  "breaks": "Preference tuning optimizes a stand-in for what people want. Push too hard and the model learns to please the reward model (reward hacking), drifts from its base knowledge, or gets wordier without getting better. Catching that takes Stage 2 discipline.",
+  "project": {
+   "title": "Instruct-tune a small model",
+   "brief": "Fine-tune a small open model (about 0.5 to 1B parameters) with LoRA on an instruction dataset, then run DPO on a preference dataset. Evaluate each step against the base model on held-out prompts.",
+   "ms": [
+    "Run the base model on 50 held-out prompts and save the outputs as your baseline",
+    "Supervised fine-tune with LoRA on an instruction dataset; plot training and validation loss",
+    "Run DPO on a preference dataset, starting from your fine-tuned checkpoint",
+    "Compare base, SFT and DPO by win rate (LLM-as-a-judge with answer order swapped) and one exact-match task, with bootstrap intervals",
+    "Find a reward-hacking or length-bias symptom in your DPO outputs and document it",
+    "Deep path: write a verifiable RL environment (for example, a checker that scores storyboard shot lists against a script) and run a small GRPO loop with TRL on a rented GPU"
+   ]
+  },
+  "predict": "Predict the DPO-vs-SFT win rate and how much average answer length will change.",
+  "explain": "Explain the difference between RLHF and DPO in three sentences, without equations.",
+  "revisit": "Put your Stage 4 dashboard on the fine-tuning run. Which training failure is most likely at this scale?",
+  "folder": "stages/05-post-training",
+  "milestone": "Stage 5 · Post-training",
+  "jobs": {
+   "roles": [
+    "Post-training research engineer",
+    "Alignment researcher",
+    "Human-data operations lead",
+    "Model behavior PM"
+   ],
+   "work": [
+    "Running preference-data programs with thousands of annotators and quality checks",
+    "Fine-tuning a customer-support model to follow one company’s policies and tone",
+    "Training reasoning models with verifiable rewards on code and math"
+   ]
+  },
+  "concepts": [
+   "Supervised fine-tuning",
+   "LoRA",
+   "Reward model",
+   "RLHF",
+   "DPO",
+   "KL penalty",
+   "Reward hacking",
+   "LLM-as-a-judge",
+   "RL with verifiable rewards",
+   "RL environments & GRPO",
+   "Interpretability"
+  ],
+  "readings": [
+   {
+    "title": "InstructGPT",
+    "authors": "Ouyang et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2203.02155",
+    "core": true,
+    "note": "Training language models to follow instructions with human feedback. The SFT → reward model → PPO pipeline."
+   },
+   {
+    "title": "Direct Preference Optimization",
+    "authors": "Rafailov et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2305.18290",
+    "core": true,
+    "note": "Shows the RLHF objective can be optimized with a simple classification-style loss on preference pairs."
+   },
+   {
+    "title": "LoRA",
+    "authors": "Hu et al.",
+    "year": 2021,
+    "url": "https://arxiv.org/abs/2106.09685",
+    "core": true,
+    "note": "Low-rank adaptation. Read the parameter-count comparison and the rank ablation."
+   },
+   {
+    "title": "Proximal Policy Optimization",
+    "authors": "Schulman et al.",
+    "year": 2017,
+    "url": "https://arxiv.org/abs/1707.06347",
+    "core": false,
+    "note": "The RL algorithm used in classic RLHF. Skim the clipped objective."
+   },
+   {
+    "title": "Constitutional AI",
+    "authors": "Bai et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2212.08073",
+    "core": false,
+    "note": "Replacing much human preference labeling with AI feedback guided by written principles."
+   },
+   {
+    "title": "Judging LLM-as-a-Judge (MT-Bench)",
+    "authors": "Zheng et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2306.05685",
+    "core": false,
+    "note": "Measures how well model judges agree with people, and documents their biases."
+   },
+   {
+    "title": "Scaling Laws for Reward Model Overoptimization",
+    "authors": "Gao, Schulman, Hilton",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2210.10760",
+    "core": false,
+    "note": "How true quality first rises and then falls as you optimize harder against a reward model."
+   },
+   {
+    "title": "Tülu 3",
+    "authors": "Lambert et al.",
+    "year": 2024,
+    "url": "https://arxiv.org/abs/2411.15124",
+    "core": false,
+    "note": "A fully open post-training recipe: SFT, DPO and RL with verifiable rewards, with data and code."
+   },
+   {
+    "title": "DeepSeek-R1",
+    "authors": "DeepSeek-AI",
+    "year": 2025,
+    "url": "https://arxiv.org/abs/2501.12948",
+    "core": false,
+    "note": "Reasoning ability from large-scale RL with verifiable rewards."
+   },
+   {
+    "title": "TRL library docs",
+    "authors": "Hugging Face",
+    "year": 2024,
+    "url": "https://huggingface.co/docs/trl",
+    "core": false,
+    "note": "The library you’ll likely use for SFT and DPO in the project."
+   },
+   {
+    "title": "DeepSeekMath (introduces GRPO)",
+    "authors": "Shao et al.",
+    "year": 2024,
+    "url": "https://arxiv.org/abs/2402.03300",
+    "core": false,
+    "note": "The paper behind GRPO, the critic-free RL method most reasoning models now use. Read the GRPO section."
+   },
+   {
+    "title": "Toy Models of Superposition",
+    "authors": "Elhage et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2209.10652",
+    "core": false,
+    "note": "Why single neurons rarely mean one thing. The foundation for sparse autoencoders."
+   },
+   {
+    "title": "On the Biology of a Large Language Model",
+    "authors": "Lindsey et al., Anthropic",
+    "year": 2025,
+    "url": "https://transformer-circuits.pub/2025/attribution-graphs/biology.html",
+    "core": false,
+    "note": "Attribution graphs that trace how a production model reaches specific answers."
+   },
+   {
+    "title": "circuit-tracer",
+    "authors": "Open-source tool",
+    "year": 2025,
+    "url": "https://github.com/decoderesearch/circuit-tracer",
+    "core": false,
+    "note": "Open library for building attribution graphs on open-weight models. Optional hands-on follow-up."
+   }
+  ]
+ },
+ {
+  "n": 13,
+  "code": "C",
+  "label": "Track C",
+  "name": "LLM applications",
+  "weeks": "Weeks 20–23",
+  "why": "Follows Stage 5 because you now know what fine-tuning and judges can and can’t do, so you can choose between prompting, retrieval and tuning.",
+  "serves": "the agency CRM, the storyboard app, the video editor",
+  "hwt": "Mac plus API credits; a small cloud server to deploy",
+  "sec": "Agents that read the web can be hijacked by hidden instructions. Give tools the least access they need and require approval for anything irreversible. Track S goes deeper.",
+  "tst": "Every prompt or model change reruns the eval set. Block the change if scores drop beyond the error bars.",
+  "holds": "Most of an LLM product’s value comes from the system around the model: structured outputs your code can trust, retrieval that grounds answers in your own data, tools the model can call, and evals that catch regressions.",
+  "breaks": "LLM apps fail quietly. Retrieval misses the right document, agents loop or take the wrong action, and outputs shift when the model changes. Without an eval set and logged traces, you can’t tell whether a prompt change helped. In production, an agent that can act also needs limits on what it may do and spend.",
+  "project": {
+   "title": "Agency CRM proposal agent",
+   "brief": "Build an agent that reads a lead’s website, extracts structured facts, retrieves your most relevant past projects, and drafts a proposal and landing-page copy. An eval set scores every version, and the finished agent is deployed with limits, approvals and monitoring.",
+   "ms": [
+    "Extract company name, industry, size signals and contact page into a validated JSON schema from 50 real websites; measure field accuracy",
+    "Index your past proposals and project notes; build retrieval with embeddings plus keyword search; measure recall@5 on 30 queries you write",
+    "Draft proposals grounded in the retrieved projects, citing which past project each claim came from",
+    "Add tools (a pricing calculator, calendar availability) and log a full trace of every run",
+    "Build a 40-case eval set with rubric-based LLM judging, spot-check it against your own grades, and compare two prompt versions with bootstrap intervals",
+    "Add guardrails against inventing clients or prices, and test them with adversarial inputs, including instructions hidden in a lead’s website",
+    "Package your tools as an MCP server and connect the agent to it, so the storyboard app and the video editor can reuse them",
+    "Deploy the agent behind an API with per-run cost and time limits, retries, human approval before anything is sent to a lead, and a dashboard of traces and eval scores",
+    "Decision-layer bake-off: qualify 300 leads three ways (a small fine-tuned classifier, a frontier LLM with structured output, and a System One decision model, either TypeSafe’s hosted Jev or an open-weight one such as Amazon’s Strands Decider 2B running on your Mac); compare accuracy with bootstrap intervals, calibration (Brier score and a reliability diagram), p95 latency and cost per 1,000 decisions"
+   ]
+  },
+  "predict": "Predict your retrieval recall@5 before you measure it.",
+  "explain": "Explain when to fine-tune, when to retrieve and when to just rewrite the prompt.",
+  "revisit": "Apply Stage 5’s judge-bias fixes to your eval. Does swapping answer order change the result?",
+  "folder": "stages/track-c-llm-applications",
+  "milestone": "Track C · LLM applications",
+  "jobs": {
+   "roles": [
+    "AI engineer",
+    "Forward-deployed engineer",
+    "Solutions engineer",
+    "AI product manager",
+    "Customer program manager for AI deployments"
+   ],
+   "work": [
+    "Deploying an internal knowledge assistant over company documents, with access controls per team",
+    "Building agents that triage support tickets and draft replies, with a human approving each send",
+    "Running evals and red-teaming before an enterprise customer goes live",
+    "Leading a customer’s rollout program: success metrics, pilot groups, risk reviews and adoption reporting"
+   ]
+  },
+  "concepts": [
+   "Prompting & context",
+   "Structured output",
+   "Retrieval-augmented generation",
+   "Vector & hybrid search",
+   "Tool use & agents",
+   "Prompt injection & guardrails",
+   "App evals & tracing",
+   "Deploying agents",
+   "MCP & tool servers",
+   "Decision models (System 1)",
+   "Long-horizon agent evals",
+   "Continual learning & memory"
+  ],
+  "readings": [
+   {
+    "title": "Retrieval-Augmented Generation",
+    "authors": "Lewis et al.",
+    "year": 2020,
+    "url": "https://arxiv.org/abs/2005.11401",
+    "core": true,
+    "note": "The original RAG paper."
+   },
+   {
+    "title": "ReAct",
+    "authors": "Yao et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2210.03629",
+    "core": true,
+    "note": "Interleaving reasoning and tool actions. The pattern behind most agents."
+   },
+   {
+    "title": "Building Effective Agents",
+    "authors": "Anthropic",
+    "year": 2024,
+    "url": "https://www.anthropic.com/engineering/building-effective-agents",
+    "core": true,
+    "note": "When to use simple workflows versus agents, with concrete patterns."
+   },
+   {
+    "title": "Your AI Product Needs Evals",
+    "authors": "Hamel Husain",
+    "year": 2024,
+    "url": "https://hamel.dev/blog/posts/evals/",
+    "core": true,
+    "note": "A practical guide to building eval sets and looking at your data."
+   },
+   {
+    "title": "Sentence-BERT",
+    "authors": "Reimers & Gurevych",
+    "year": 2019,
+    "url": "https://arxiv.org/abs/1908.10084",
+    "core": false,
+    "note": "How sentence embeddings for semantic search are trained."
+   },
+   {
+    "title": "Lost in the Middle",
+    "authors": "Liu et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2307.03172",
+    "core": false,
+    "note": "Models use information at the start and end of long contexts better than the middle."
+   },
+   {
+    "title": "Toolformer",
+    "authors": "Schick et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2302.04761",
+    "core": false,
+    "note": "A model learning when to call tools."
+   },
+   {
+    "title": "Indirect Prompt Injection",
+    "authors": "Greshake et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2302.12173",
+    "core": false,
+    "note": "Not what you’ve signed up for: attacks through content an app retrieves. Directly relevant to reading lead websites."
+   },
+   {
+    "title": "Model Context Protocol docs",
+    "authors": "MCP project",
+    "year": 2024,
+    "url": "https://modelcontextprotocol.io",
+    "core": false,
+    "note": "How to build and connect MCP servers for your tools and data."
+   },
+   {
+    "title": "ModernBERT",
+    "authors": "Warner et al.",
+    "year": 2024,
+    "url": "https://arxiv.org/abs/2412.13663",
+    "core": false,
+    "note": "A modern encoder you can fine-tune into a fast text classifier. Your do-it-yourself System One baseline."
+   },
+   {
+    "title": "Measuring AI Ability to Complete Long Software Tasks",
+    "authors": "Kwa et al., METR",
+    "year": 2025,
+    "url": "https://arxiv.org/abs/2503.14499",
+    "core": false,
+    "note": "The time-horizon method for agents. METR publishes updated measurements (Time Horizon 1.1 in 2026) that show faster growth, with wide uncertainty."
+   },
+   {
+    "title": "Why We Need Continual Learning",
+    "authors": "Aubakirova & Bornstein, a16z",
+    "year": 2026,
+    "url": "https://a16z.com/why-we-need-continual-learning/",
+    "core": false,
+    "note": "A clear map of memory, module and weight-update approaches to letting models keep learning."
+   }
+  ]
+ },
+ {
+  "n": 15,
+  "code": "S",
+  "label": "Track S",
+  "name": "Security, privacy & safety",
+  "weeks": "Weeks 24–25",
+  "why": "Comes right after Track C, the first time you ship something that reads untrusted input and takes actions, and before the tracks that handle client footage, faces and voices.",
+  "serves": "the ad marketplace, the storyboard app, the video editor, the agency CRM",
+  "hwt": "Mac",
+  "sec": null,
+  "tst": "Keep your 30 attacks as an automated test suite and rerun it on every change to the agent.",
+  "holds": "Most ML security failures are ordinary security failures in a new place: untrusted input, permissions that are too broad, leaked secrets and unvetted dependencies. Threat modeling, least privilege and red-teaming your own system catch most of them.",
+  "breaks": "ML adds attacks ordinary security tools don’t see: instructions hidden in data, poisoned training sets, model files that run code when loaded, and models that leak what they were trained on. Safety failures, such as discriminatory ad targeting or deceptive generated media, cause harm even when nothing is breached.",
+  "project": {
+   "title": "Red-team your own agent",
+   "brief": "Threat-model the proposal agent from Track C, attack it the way an adversary would, fix what you find, and write the one-page security and privacy review an enterprise customer’s security team would ask for.",
+   "ms": [
+    "Threat-model the agent against the OWASP Top 10 for LLM Applications (2026): list its assets, entry points, tools and exactly what each tool may do",
+    "Red-team it with 30 attacks, including instructions hidden in a lead’s website, data exfiltration through tool calls, and attempts to make it quote unapproved prices; record the success rate",
+    "Fix the top three problems (least-privilege tools, approval gates, output checks) and re-run the same 30 attacks to measure the improvement",
+    "Secure the supply chain: load models only as safetensors, pin dependency versions, scan for secrets, and show with a harmless demo why loading an untrusted pickle file runs code",
+    "Run a membership-inference test on a small model fine-tuned on private text, then retrain with deduplication or differential privacy and compare",
+    "Write a one-page security, privacy and responsible-use review: data handled, retention, consent for faces and voices, ad-targeting rules, and how generated media is labeled"
+   ]
+  },
+  "predict": "Predict what share of your 30 attacks will succeed before you run them.",
+  "explain": "Explain indirect prompt injection to a non-technical client, and why a better prompt can’t fully fix it.",
+  "revisit": "Go back to your Stage 2 leakage checklist. Which of those leaks would also be a privacy breach if the data were about real people?",
+  "folder": "stages/track-s-security-privacy-safety",
+  "milestone": "Track S · Security, privacy & safety",
+  "jobs": {
+   "roles": [
+    "AI security engineer",
+    "AI red-team engineer",
+    "Privacy engineer",
+    "Trust and safety lead",
+    "AI governance program manager",
+    "Security TPM"
+   ],
+   "work": [
+    "Red-teaming a new model or agent before launch and tracking every finding to a fix",
+    "Running the AI risk review that every customer-facing AI feature must pass, mapped to NIST AI RMF",
+    "Answering enterprise customers’ security questionnaires about how their data is used in AI features",
+    "Detecting and removing deepfake and scam ads on an ad platform"
+   ]
+  },
+  "concepts": [
+   "Threat modeling & least privilege",
+   "Red-teaming",
+   "Adversarial examples & jailbreaks",
+   "Data poisoning & backdoors",
+   "Model supply chain",
+   "Privacy attacks & differential privacy",
+   "Content provenance & labeling",
+   "Fairness in targeting & scoring"
+  ],
+  "readings": [
+   {
+    "title": "OWASP Top 10 for LLM Applications (2026)",
+    "authors": "OWASP GenAI Security Project",
+    "year": 2026,
+    "url": "https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/",
+    "core": true,
+    "note": "The standard checklist of LLM application risks. The 2026 edition was published in August 2026 and ranks excessive agency third."
+   },
+   {
+    "title": "Extracting Training Data from Large Language Models",
+    "authors": "Carlini et al.",
+    "year": 2020,
+    "url": "https://arxiv.org/abs/2012.07805",
+    "core": true,
+    "note": "Shows language models can repeat private training text word for word."
+   },
+   {
+    "title": "Agent Control Standard",
+    "authors": "OWASP GenAI Security Project",
+    "year": 2026,
+    "url": "https://genai.owasp.org/resource/agent-control-standard-acs/",
+    "core": false,
+    "note": "Guidance for enforcing controls on agents while they run."
+   },
+   {
+    "title": "MITRE ATLAS",
+    "authors": "MITRE",
+    "year": 2024,
+    "url": "https://atlas.mitre.org/",
+    "core": false,
+    "note": "A catalog of real attacks on AI systems, organized like the ATT&CK framework security teams use."
+   },
+   {
+    "title": "NIST AI RMF: Generative AI Profile",
+    "authors": "NIST",
+    "year": 2024,
+    "url": "https://doi.org/10.6028/NIST.AI.600-1",
+    "core": false,
+    "note": "The risk framework many enterprise AI governance programs map to."
+   },
+   {
+    "title": "Explaining and Harnessing Adversarial Examples",
+    "authors": "Goodfellow, Shlens, Szegedy",
+    "year": 2014,
+    "url": "https://arxiv.org/abs/1412.6572",
+    "core": false,
+    "note": "The classic short paper on why tiny input changes fool neural networks."
+   },
+   {
+    "title": "Universal and Transferable Adversarial Attacks on Aligned LMs",
+    "authors": "Zou et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2307.15043",
+    "core": false,
+    "note": "Automatically generated jailbreak suffixes that transfer between models."
+   },
+   {
+    "title": "Poisoning Web-Scale Training Datasets is Practical",
+    "authors": "Carlini et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2302.10149",
+    "core": false,
+    "note": "How cheaply an attacker can plant data in datasets scraped from the web."
+   },
+   {
+    "title": "Membership Inference Attacks",
+    "authors": "Shokri et al.",
+    "year": 2016,
+    "url": "https://arxiv.org/abs/1610.05820",
+    "core": false,
+    "note": "The attack your project milestone reproduces."
+   },
+   {
+    "title": "Deep Learning with Differential Privacy",
+    "authors": "Abadi et al.",
+    "year": 2016,
+    "url": "https://arxiv.org/abs/1607.00133",
+    "core": false,
+    "note": "DP-SGD, the standard way to train with a privacy guarantee."
+   },
+   {
+    "title": "safetensors docs",
+    "authors": "Hugging Face",
+    "year": 2024,
+    "url": "https://huggingface.co/docs/safetensors",
+    "core": false,
+    "note": "A tensor-only weight format designed to be safe to load, unlike pickle files."
+   },
+   {
+    "title": "C2PA content credentials",
+    "authors": "Coalition for Content Provenance and Authenticity",
+    "year": 2024,
+    "url": "https://c2pa.org/",
+    "core": false,
+    "note": "The open standard for attaching tamper-evident provenance to images and video."
+   },
+   {
+    "title": "Fairness and Machine Learning",
+    "authors": "Barocas, Hardt, Narayanan",
+    "year": 2023,
+    "url": "https://fairmlbook.org/",
+    "core": false,
+    "note": "Free book. The chapters on classification and on causality fit Track D’s targeting and scoring work."
+   }
+  ]
+ },
+ {
+  "n": 6,
+  "code": null,
+  "label": "Stage 6",
+  "name": "Convolution & inductive bias",
+  "weeks": "Weeks 26–27",
+  "why": "Placed here so the CNN-vs-ViT comparison uses proper evaluation, and because the CNN and ViT backbones are what Tracks B and A build on. It also sets up a question the systems stages answer: why is convolution so cheap?",
+  "serves": null,
+  "hwt": "Mac",
+  "sec": "Vision models can be fooled by tiny, invisible pixel changes, so never use one alone for a security decision.",
+  "tst": "Add behavioral tests: a flipped or slightly cropped image should get the same label.",
+  "holds": "Convolution builds in locality and weight sharing, so it needs less data, and each weight is reused at every position, which keeps arithmetic intensity high.",
+  "breaks": "ViT showed that weak priors win once data is large enough, and ConvNeXt showed much of the remaining gap was training recipe. Inductive bias is a trade against data, not a law.",
+  "project": {
+   "title": "CNN vs ViT on a data diet",
+   "brief": "Train a small ResNet-style CNN and a tiny ViT with matched parameter counts on CIFAR-10 at 10%, 30% and 100% of the training set. Count FLOPs per image for both.",
+   "ms": [
+    "Small CNN baseline with augmentation and a cosine schedule",
+    "Tiny ViT with patch embedding, reusing your Stage 3 attention block",
+    "Run both at three data fractions with the same budget",
+    "Plot accuracy vs data fraction and annotate FLOPs per image"
+   ]
+  },
+  "predict": "At which data fraction does the gap close, if it closes at all at this scale?",
+  "explain": "Explain “inductive bias” using your plot, not a definition.",
+  "revisit": "Use your Stage 2 bootstrap intervals. At which data fractions is the CNN–ViT gap real?",
+  "folder": "stages/06-convolution-inductive-bias",
+  "milestone": "Stage 6 · Convolution & inductive bias",
+  "jobs": {
+   "roles": [
+    "Computer vision engineer",
+    "Perception engineer (robotics, autonomous vehicles)",
+    "Edge ML engineer"
+   ],
+   "work": [
+    "Defect detection on factory cameras with models small enough to run on the line",
+    "Choosing a CNN or transformer backbone for a phone camera feature under a strict latency budget"
+   ]
+  },
+  "concepts": [
+   "Convolution",
+   "Locality",
+   "Weight sharing",
+   "Patch embedding",
+   "Inductive bias"
+  ],
+  "readings": [
+   {
+    "title": "ResNet",
+    "authors": "He et al.",
+    "year": 2015,
+    "url": "https://arxiv.org/abs/1512.03385",
+    "core": true,
+    "note": "Residual connections. They show up again in every transformer block."
+   },
+   {
+    "title": "Vision Transformer (ViT)",
+    "authors": "Dosovitskiy et al.",
+    "year": 2020,
+    "url": "https://arxiv.org/abs/2010.11929",
+    "core": true,
+    "note": "An Image is Worth 16x16 Words. Read the data-scale experiments closely: ViT trails ResNets on smaller datasets."
+   },
+   {
+    "title": "ConvNeXt",
+    "authors": "Liu et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2201.03545",
+    "core": true,
+    "note": "A ConvNet for the 2020s. Modernizes a ResNet step by step to match transformers."
+   },
+   {
+    "title": "LeNet: Gradient-Based Learning Applied to Document Recognition",
+    "authors": "LeCun et al.",
+    "year": 1998,
+    "url": "https://doi.org/10.1109/5.726791",
+    "core": false,
+    "note": "Gradient-based learning applied to document recognition. Where conv nets became practical."
+   },
+   {
+    "title": "AlexNet",
+    "authors": "Krizhevsky, Sutskever, Hinton",
+    "year": 2012,
+    "url": "https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks",
+    "core": false,
+    "note": "Conv nets on GPUs win ImageNet. Note how much of the paper is about fitting the model on two GPUs."
+   },
+   {
+    "title": "CS231n conv notes",
+    "authors": "Stanford",
+    "year": 2016,
+    "url": "https://cs231n.github.io/convolutional-networks/",
+    "core": false,
+    "note": "The clearest walk-through of conv shapes, strides and receptive fields."
+   }
+  ]
+ },
+ {
+  "n": 12,
+  "code": "B",
+  "label": "Track B",
+  "name": "Video & audio understanding",
+  "weeks": "Weeks 28–31",
+  "why": "Follows Stage 6 because these models are built on CNN and ViT backbones, and it comes before Track A because masks, depth and pose are what you use to control generation.",
+  "serves": "the video editor, the storyboard app",
+  "hwt": "Mac; a cloud GPU speeds up long clips",
+  "sec": "Face and voice data counts as biometric data in many places, with consent and retention rules. Get written consent and keep it in your private repo.",
+  "tst": "Keep hand-labeled clips from your own footage as a fixed test set, and never tune on them.",
+  "holds": "Pretrained models now handle most perception tasks out of the box: segment and track an object, estimate depth and motion, embed frames for search, and transcribe speech with word timings.",
+  "breaks": "Real footage breaks them at the edges: motion blur, low light, fast cuts, overlapping speakers, music under dialogue. Errors also build up over time, so a mask that drifts two pixels a frame is useless after ten seconds.",
+  "project": {
+   "title": "Video editor assistant",
+   "brief": "Point a pipeline at a folder of your own footage. It should find shots, score and cull them, tag them for search, caption the dialogue, and produce a tracked mask for one subject through a full clip.",
+   "ms": [
+    "Detect shot boundaries in 30 minutes of footage; measure precision and recall against cuts you mark by hand",
+    "Score each shot for blur, exposure, face visibility and motion; compare its top picks with yours",
+    "Embed frames with a CLIP-style model and build text search such as “wide shot, golden hour, two people”; measure recall@10",
+    "Transcribe with a Whisper-class model, add speaker labels and export word-timed captions; measure word error rate on 5 minutes you correct by hand",
+    "Segment and track one subject through a 20-second clip with a SAM 2–class model; measure how far the mask drifts",
+    "Separate dialogue from music, then normalize loudness to a broadcast target",
+    "Compare CLIP features with self-supervised video features (a V-JEPA-class model) for finding visually similar shots; report recall@10 for each"
+   ]
+  },
+  "predict": "Predict where in your clip the tracked mask will fail first.",
+  "explain": "Explain the difference between detecting, segmenting and tracking an object, using one of your clips.",
+  "revisit": "Use Stage 2 discipline: build a small hand-labeled test set from your own footage before trusting any of these models.",
+  "folder": "stages/track-b-video-audio-understanding",
+  "milestone": "Track B · Video & audio understanding",
+  "jobs": {
+   "roles": [
+    "Computer vision engineer",
+    "Video ML engineer (streaming, creative tools)",
+    "Speech and audio ML engineer",
+    "Trust and safety ML engineer"
+   ],
+   "work": [
+    "Auto-captioning and translating a streaming service’s whole catalog",
+    "Moderation systems that scan uploaded video for policy violations",
+    "Smart search, auto-reframe and transcript-based editing in professional editing software"
+   ]
+  },
+  "concepts": [
+   "Shot detection",
+   "CLIP & vision-language models",
+   "Segmentation",
+   "Tracking & optical flow",
+   "Depth & pose estimation",
+   "Quality assessment",
+   "Speech recognition",
+   "Source separation",
+   "Speech synthesis",
+   "Self-supervised learning & JEPA"
+  ],
+  "readings": [
+   {
+    "title": "CLIP",
+    "authors": "Radford et al.",
+    "year": 2021,
+    "url": "https://arxiv.org/abs/2103.00020",
+    "core": true,
+    "note": "Learning Transferable Visual Models From Natural Language Supervision. The basis of text-to-footage search."
+   },
+   {
+    "title": "SAM 2",
+    "authors": "Ravi et al.",
+    "year": 2024,
+    "url": "https://arxiv.org/abs/2408.00714",
+    "core": true,
+    "note": "Segment Anything in images and videos, with a memory for tracking across frames."
+   },
+   {
+    "title": "Whisper",
+    "authors": "Radford et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2212.04356",
+    "core": true,
+    "note": "Robust speech recognition trained on large weakly labeled data."
+   },
+   {
+    "title": "V-JEPA",
+    "authors": "Bardes et al.",
+    "year": 2024,
+    "url": "https://arxiv.org/abs/2404.08471",
+    "core": true,
+    "note": "Revisiting Feature Prediction for Learning Visual Representations from Video. Video understanding learned without labels."
+   },
+   {
+    "title": "Segment Anything",
+    "authors": "Kirillov et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2304.02643",
+    "core": false,
+    "note": "The promptable image segmentation model SAM 2 builds on."
+   },
+   {
+    "title": "RAFT",
+    "authors": "Teed & Deng",
+    "year": 2020,
+    "url": "https://arxiv.org/abs/2003.12039",
+    "core": false,
+    "note": "Optical flow estimation. Also how you measure flicker in Track A."
+   },
+   {
+    "title": "Depth Anything",
+    "authors": "Yang et al.",
+    "year": 2024,
+    "url": "https://arxiv.org/abs/2401.10891",
+    "core": false,
+    "note": "Monocular depth estimation that works on everyday footage."
+   },
+   {
+    "title": "TransNet V2",
+    "authors": "Souček & Lokoč",
+    "year": 2020,
+    "url": "https://arxiv.org/abs/2008.04838",
+    "core": false,
+    "note": "A fast, accurate shot-boundary detector."
+   },
+   {
+    "title": "Hybrid Transformers for Music Source Separation",
+    "authors": "Rouard, Massa, Défossez",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2211.08553",
+    "core": false,
+    "note": "The Demucs model family for splitting audio into stems."
+   },
+   {
+    "title": "pyannote.audio",
+    "authors": "Bredin et al.",
+    "year": 2023,
+    "url": "https://github.com/pyannote/pyannote-audio",
+    "core": false,
+    "note": "Open toolkit for speaker diarization."
+   },
+   {
+    "title": "VALL-E",
+    "authors": "Wang et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2301.02111",
+    "core": false,
+    "note": "Text-to-speech as language modeling over audio tokens. Read with the consent questions in mind."
+   },
+   {
+    "title": "I-JEPA",
+    "authors": "Assran et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2301.08243",
+    "core": false,
+    "note": "The image version: predict the embeddings of masked image regions from the visible ones."
+   },
+   {
+    "title": "Masked Autoencoders",
+    "authors": "He et al.",
+    "year": 2021,
+    "url": "https://arxiv.org/abs/2111.06377",
+    "core": false,
+    "note": "Hide most of an image and reconstruct the pixels. The pixel-predicting contrast to JEPA."
+   },
+   {
+    "title": "DINOv2",
+    "authors": "Oquab et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2304.07193",
+    "core": false,
+    "note": "Strong general-purpose visual features learned without labels. A good default for similarity search."
+   }
+  ]
+ },
+ {
+  "n": 11,
+  "code": "A",
+  "label": "Track A",
+  "name": "Generative vision",
+  "weeks": "Weeks 32–37",
+  "why": "Comes after Track B, so you already have the masks, depth maps and poses that control generation, and after Stage 5, so LoRA and preference tuning carry over.",
+  "serves": "the storyboard app, the video editor",
+  "hwt": "Cloud NVIDIA GPU for video models; Mac for image work",
+  "sec": "Generated media can deceive. Label it, keep provenance metadata (C2PA), and never generate real people without permission.",
+  "tst": "Generate with fixed seeds and reference images so you can see when a change alters identity or style.",
+  "holds": "Diffusion and flow-matching models make images by learning to undo noise step by step. Working in a compressed latent space makes this affordable, and conditioning signals such as text, pose, depth and reference images give you control.",
+  "breaks": "Control is the hard part. Text prompts don’t pin down identity, camera or layout; characters drift between shots; video models flicker; and every denoising step is a full model pass, so speed and consistency trade against each other.",
+  "project": {
+   "title": "Storyboard engine",
+   "brief": "Turn a three-scene script into a consistent storyboard: one character with a fixed identity, controlled poses and framing, and a short animated shot. Start with a tiny diffusion model you write yourself, then move to an open latent diffusion model.",
+   "ms": [
+    "Train a tiny DDPM on 32×32 images from scratch; save sample grids every few epochs",
+    "Swap the objective for flow matching and compare sample quality at 10, 25 and 50 steps",
+    "With an open latent diffusion model, generate one shot three ways: text only, with depth and pose conditioning, and with a reference image",
+    "Train a character LoRA on 15–30 images; measure identity consistency across 20 shots with face-embedding similarity",
+    "Generate a 3-second clip with an open video model from a storyboard frame; measure flicker with optical-flow warping error",
+    "Build script → shot list → frames end to end and run a blind preference test against plain text-to-image",
+    "Deep path: run an open text-diffusion model such as DiffusionGemma on a rented GPU and compare tokens per second and quality with its autoregressive twin on a caption-editing task"
+   ]
+  },
+  "predict": "Predict how many denoising steps you can cut before you notice quality loss.",
+  "explain": "Explain classifier-free guidance, and why turning it up too high makes images worse.",
+  "revisit": "Compare your character LoRA with the language LoRA from Stage 5. What is the same, and what is different?",
+  "folder": "stages/track-a-generative-vision",
+  "milestone": "Track A · Generative vision",
+  "jobs": {
+   "roles": [
+    "Generative media research engineer",
+    "Creative tools ML engineer",
+    "ML engineer at a VFX or animation studio",
+    "Applied scientist for ad creative"
+   ],
+   "work": [
+    "Generative fill and video extension features inside creative software suites",
+    "Consistent product imagery for thousands of ad variants from one brand kit",
+    "Previsualization pipelines that turn scripts into animatics for film and game studios"
+   ]
+  },
+  "concepts": [
+   "Diffusion models",
+   "Samplers & steps",
+   "Flow matching",
+   "Latent diffusion & VAEs",
+   "Classifier-free guidance",
+   "Conditioning & control",
+   "Character consistency",
+   "Inpainting & editing",
+   "Video generation",
+   "Camera & 3D",
+   "Diffusion language models"
+  ],
+  "readings": [
+   {
+    "title": "What are Diffusion Models?",
+    "authors": "Lilian Weng",
+    "year": 2021,
+    "url": "https://lilianweng.github.io/posts/2021-07-11-diffusion-models/",
+    "core": true,
+    "note": "The clearest single walk-through of the math. Read before DDPM."
+   },
+   {
+    "title": "DDPM",
+    "authors": "Ho, Jain, Abbeel",
+    "year": 2020,
+    "url": "https://arxiv.org/abs/2006.11239",
+    "core": true,
+    "note": "Denoising Diffusion Probabilistic Models. The paper your tiny diffusion model reimplements."
+   },
+   {
+    "title": "Latent Diffusion (Stable Diffusion)",
+    "authors": "Rombach et al.",
+    "year": 2021,
+    "url": "https://arxiv.org/abs/2112.10752",
+    "core": true,
+    "note": "Diffusion in an autoencoder’s latent space, with cross-attention for text conditioning."
+   },
+   {
+    "title": "Classifier-Free Diffusion Guidance",
+    "authors": "Ho & Salimans",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2207.12598",
+    "core": true,
+    "note": "Short paper behind the guidance-scale slider in every image tool."
+   },
+   {
+    "title": "ControlNet",
+    "authors": "Zhang, Rao, Agrawala",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2302.05543",
+    "core": true,
+    "note": "Adding pose, depth and edge control to a frozen diffusion model."
+   },
+   {
+    "title": "Flow Matching for Generative Modeling",
+    "authors": "Lipman et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2210.02747",
+    "core": false,
+    "note": "The objective behind several recent image and video models."
+   },
+   {
+    "title": "DiT: Scalable Diffusion with Transformers",
+    "authors": "Peebles & Xie",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2212.09748",
+    "core": false,
+    "note": "Replaces the U-Net with a transformer. Connects Track A to Stage 3 scaling."
+   },
+   {
+    "title": "DreamBooth",
+    "authors": "Ruiz et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2208.12242",
+    "core": false,
+    "note": "Fine-tuning a model on a few images of one subject to keep its identity."
+   },
+   {
+    "title": "IP-Adapter",
+    "authors": "Ye et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2308.06721",
+    "core": false,
+    "note": "Conditioning on a reference image without fine-tuning."
+   },
+   {
+    "title": "Stable Video Diffusion",
+    "authors": "Blattmann et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2311.15127",
+    "core": false,
+    "note": "Scaling latent diffusion to video, with a detailed section on data curation."
+   },
+   {
+    "title": "3D Gaussian Splatting",
+    "authors": "Kerbl et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2308.04079",
+    "core": false,
+    "note": "Real-time rendering of captured 3D scenes. Useful for locations you can move a virtual camera through."
+   },
+   {
+    "title": "Diffusers library docs",
+    "authors": "Hugging Face",
+    "year": 2024,
+    "url": "https://huggingface.co/docs/diffusers",
+    "core": false,
+    "note": "The library you will likely use for the open-model milestones."
+   },
+   {
+    "title": "The Flexibility Trap",
+    "authors": "Ni et al.",
+    "year": 2026,
+    "url": "https://arxiv.org/abs/2601.15165",
+    "core": false,
+    "note": "ICML 2026 Outstanding Paper. Questions whether generating tokens in any order is diffusion LMs’ real advantage."
+   },
+   {
+    "title": "DiffusionGemma 26B-A4B",
+    "authors": "Google DeepMind",
+    "year": 2026,
+    "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it",
+    "core": false,
+    "note": "Open-weight text diffusion model released June 2026, built on an MoE backbone. The model for the Track A deep-path milestone."
+   }
+  ]
+ },
+ {
+  "n": 7,
+  "code": null,
+  "label": "Stage 7",
+  "name": "GPU execution & profiling",
+  "weeks": "Weeks 38–39",
+  "why": "Moved ahead of IO-aware kernels. You need to read a trace and understand async launches before a roofline means anything.",
+  "serves": null,
+  "hwt": "Mac (Instruments) plus a few hours on a rented NVIDIA GPU for Nsight",
+  "sec": "Rented GPU machines are on the internet. Never expose Jupyter without a password, and keep API keys out of notebooks.",
+  "tst": "Add a benchmark test that fails if a training step gets more than 10% slower.",
+  "holds": "CUDA launches are asynchronous. When kernels are large, Python races ahead and its cost is hidden.",
+  "breaks": "When kernels are tiny, as in small-batch decode, or when code hits a sync point like .item(), the GPU sits idle waiting for Python. The gaps are visible in an Nsight trace.",
+  "project": {
+   "title": "Read the trace",
+   "brief": "Profile your own training and decoding loops until you can point at every gap in the timeline and say what caused it. Do the first pass on your Mac with Instruments, then rent an NVIDIA GPU for a few hours to see the same loop in Nsight.",
+   "ms": [
+    "Profile a training step with torch.profiler, then with Nsight Systems on a rented NVIDIA GPU (or Instruments’ Metal System Trace on your Mac); label compute vs idle",
+    "Insert a .item() inside the loop and find the stall it causes in the trace",
+    "Profile batch-1 decoding of your GPT and measure GPU idle percentage",
+    "Add DataLoader workers and pinned memory; show the input-pipeline gap close"
+   ]
+  },
+  "predict": "Predict GPU idle percentage during batch-1 decoding before profiling.",
+  "explain": "Explain, with your trace screenshot, when Python is and is not the bottleneck.",
+  "revisit": "Profile your Stage 6 CNN training step. Is the GPU waiting on data loading?",
+  "folder": "stages/07-gpu-execution-profiling",
+  "milestone": "Stage 7 · GPU execution & profiling",
+  "jobs": {
+   "roles": [
+    "ML performance engineer",
+    "ML infrastructure engineer",
+    "TPM for training infrastructure",
+    "GPU developer advocate"
+   ],
+   "work": [
+    "Finding why a training cluster runs at 35% utilization and raising it",
+    "Profiling a slow inference service before a major launch and removing sync stalls"
+   ]
+  },
+  "concepts": [
+   "GPU execution model",
+   "Async launches",
+   "Sync points",
+   "Launch overhead",
+   "Profiling",
+   "Input pipeline"
+  ],
+  "readings": [
+   {
+    "title": "Making Deep Learning Go Brrrr",
+    "authors": "Horace He",
+    "year": 2022,
+    "url": "https://horace.io/brrr_intro.html",
+    "core": true,
+    "note": "Compute, memory bandwidth and overhead as the three regimes. The best single map for Stages 7, 8 and 10."
+   },
+   {
+    "title": "PyTorch CUDA semantics",
+    "authors": "PyTorch docs",
+    "year": 2024,
+    "url": "https://docs.pytorch.org/docs/stable/notes/cuda.html",
+    "core": true,
+    "note": "Asynchronous execution, streams and what forces synchronization."
+   },
+   {
+    "title": "PyTorch Profiler recipe",
+    "authors": "PyTorch docs",
+    "year": 2024,
+    "url": "https://docs.pytorch.org/tutorials/recipes/recipes/profiler_recipe.html",
+    "core": false,
+    "note": "How to record and read a profile from inside your training script."
+   },
+   {
+    "title": "Nsight Systems guide",
+    "authors": "NVIDIA",
+    "year": 2024,
+    "url": "https://docs.nvidia.com/nsight-systems/UserGuide/index.html",
+    "core": false,
+    "note": "How to capture and read a timeline trace."
+   },
+   {
+    "title": "GPU MODE lectures",
+    "authors": "GPU MODE community",
+    "year": 2024,
+    "url": "https://github.com/gpu-mode/lectures",
+    "core": false,
+    "note": "Lecture notes and code on CUDA, Triton and profiling. Also a good place for outside feedback."
+   }
+  ]
+ },
+ {
+  "n": 8,
+  "code": null,
+  "label": "Stage 8",
+  "name": "IO-aware kernels",
+  "weeks": "Weeks 40–41",
+  "why": "The FlashAttention beat lands better now: you can already see memory traffic in a trace, and here you write the fused kernel that removes it.",
+  "serves": null,
+  "hwt": "Mac for the Metal path, or a rented NVIDIA GPU for the Triton path",
+  "sec": null,
+  "tst": "Test every kernel against the PyTorch version for correctness before you time it.",
+  "holds": "Softmax, LayerNorm, elementwise ops and long-sequence attention are memory-bound. FlashAttention wins by cutting reads and writes to HBM, while doing slightly more FLOPs.",
+  "breaks": "Large training matmuls are compute-bound. “FLOPs don’t matter” is only true to the left of the roofline’s ridge point, and the roofline tells you which side you are on.",
+  "project": {
+   "title": "Roofline your GPU, then write the kernel",
+   "brief": "Build a roofline for your hardware, place measured ops on it, and implement online softmax. Then write one fused kernel: Triton on a rented NVIDIA GPU, or Metal through MLX on your Mac. A fused color-grade kernel is the Metal option, and it is directly useful for the video editor. Runs at measure-and-reason depth: two weeks, one kernel.",
+   "ms": [
+    "Compute peak FLOP/s, memory bandwidth and ridge point for your GPU or Mac",
+    "Benchmark matmuls at several sizes plus softmax and LayerNorm; plot achieved throughput on the roofline",
+    "Implement online softmax in NumPy and match naive softmax to 1e-6",
+    "Time naive attention vs F.scaled_dot_product_attention at sequence lengths 512 to 8k, recording time and peak memory",
+    "Write one fused kernel: a Triton row-softmax on a rented NVIDIA GPU, or a fused color-grade kernel in Metal through MLX on your Mac",
+    "Plot your fused kernel on your roofline next to the unfused version"
+   ]
+  },
+  "predict": "Which of your measured ops will land left of the ridge point?",
+  "explain": "Explain why FlashAttention does more FLOPs and still runs faster.",
+  "revisit": "Was your Stage 6 CNN compute-bound or memory-bound? Then place one denoising step from Track A on your roofline.",
+  "folder": "stages/08-io-aware-kernels",
+  "milestone": "Stage 8 · IO-aware kernels",
+  "jobs": {
+   "roles": [
+    "GPU kernel engineer",
+    "ML compiler engineer (Triton, XLA, MLIR)",
+    "Performance engineer at a chip company"
+   ],
+   "work": [
+    "Writing fused attention kernels for a new GPU generation",
+    "Optimizing on-device models for Apple Silicon or mobile chips with Metal"
+   ]
+  },
+  "concepts": [
+   "Memory hierarchy",
+   "Arithmetic intensity",
+   "Roofline model",
+   "Kernel fusion",
+   "Tiling",
+   "Online softmax",
+   "Coalescing"
+  ],
+  "readings": [
+   {
+    "title": "FlashAttention",
+    "authors": "Dao et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2205.14135",
+    "core": true,
+    "note": "Exact attention with tiling and recomputation. Read the IO-complexity analysis, not just the speedups."
+   },
+   {
+    "title": "Triton tutorials",
+    "authors": "OpenAI / Triton",
+    "year": 2021,
+    "url": "https://triton-lang.org/main/getting-started/tutorials/index.html",
+    "core": true,
+    "note": "Vector add, fused softmax, matmul. Type them out; do not copy-paste."
+   },
+   {
+    "title": "Roofline: An Insightful Visual Performance Model",
+    "authors": "Williams, Waterman, Patterson",
+    "year": 2009,
+    "url": "https://www2.eecs.berkeley.edu/Pubs/TechRpts/2008/EECS-2008-134.html",
+    "core": false,
+    "note": "The original roofline model. This is the free Berkeley technical report; the published version appeared in Communications of the ACM in 2009."
+   },
+   {
+    "title": "Online softmax",
+    "authors": "Milakov & Gimelshein",
+    "year": 2018,
+    "url": "https://arxiv.org/abs/1805.02867",
+    "core": false,
+    "note": "Online normalizer calculation for softmax. The trick FlashAttention is built on."
+   },
+   {
+    "title": "FlashAttention-2",
+    "authors": "Tri Dao",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2307.08691",
+    "core": false,
+    "note": "Better work partitioning across warps and thread blocks."
+   },
+   {
+    "title": "FlashAttention-3",
+    "authors": "Shah et al.",
+    "year": 2024,
+    "url": "https://arxiv.org/abs/2407.08608",
+    "core": false,
+    "note": "Uses Hopper-specific async hardware and FP8."
+   },
+   {
+    "title": "Triton",
+    "authors": "Tillet, Kung, Cox",
+    "year": 2019,
+    "url": "https://www.eecs.harvard.edu/~htk/publication/2019-mapl-tillet-kung-cox.pdf",
+    "core": false,
+    "note": "The language and compiler for tiled GPU kernels in Python."
+   }
+  ]
+ },
+ {
+  "n": 9,
+  "code": null,
+  "label": "Stage 9",
+  "name": "Mixture of experts",
+  "weeks": "Weeks 42–43",
+  "why": "Needs your GPT, your roofline and your evaluation habits. MoE claims are about loss per FLOP and bytes moved, and both need honest measurement.",
+  "serves": null,
+  "hwt": "Mac; keep the model tiny",
+  "sec": null,
+  "tst": "Test that the router sends each token to exactly k experts and that the balancing loss stays finite.",
+  "holds": "MoE separates total parameters from FLOPs per token. DeepSeek-V3 reported a competitive model at a training compute budget far below comparable dense models.",
+  "breaks": "Every expert still has to be stored and moved. MoE adds memory cost, all-to-all communication and load-balancing problems, and at large decode batches nearly every expert gets touched.",
+  "project": {
+   "title": "MoE-ify your GPT",
+   "brief": "Replace the MLP in your Stage 3 model with a top-2-of-8 expert layer and study how routing behaves. Keep the model tiny so it trains on your Mac. Runs at measure-and-reason depth: the full dense comparisons are Deep path.",
+   "ms": [
+    "Router with top-2 gating and a load-balancing auxiliary loss",
+    "Log tokens per expert per step and plot the histogram over training",
+    "Ablate the balancing loss and document router collapse",
+    "Deep path: compare loss vs FLOPs for MoE, dense-active and dense-total",
+    "Count bytes of weights touched per decode step at batch 1 and batch 256",
+    "Deep path: compare MoE vs dense-active on held-out loss across 3 seeds with confidence intervals"
+   ]
+  },
+  "predict": "Predict how many experts get at least one token in a batch of 256 tokens.",
+  "explain": "Explain why active parameters set the FLOPs but total parameters set the GPU count.",
+  "revisit": "Put an MoE layer on your Stage 8 roofline. Is the expert matmul compute-bound at batch 1? What does that mean for an API price quoted per million tokens?",
+  "folder": "stages/09-mixture-of-experts",
+  "milestone": "Stage 9 · Mixture of experts",
+  "jobs": {
+   "roles": [
+    "Distributed training engineer",
+    "Inference infrastructure engineer",
+    "Research engineer (model architecture)"
+   ],
+   "work": [
+    "Laying out experts across GPU nodes to match the network topology",
+    "Pricing an MoE model’s API from its active parameters and memory footprint"
+   ]
+  },
+  "concepts": [
+   "Router / gating",
+   "Top-k routing",
+   "Load balancing",
+   "Active vs total params",
+   "Expert parallelism",
+   "All-to-all comm",
+   "Conditional memory (Engram)"
+  ],
+  "readings": [
+   {
+    "title": "Outrageously Large Neural Networks",
+    "authors": "Shazeer et al.",
+    "year": 2017,
+    "url": "https://arxiv.org/abs/1701.06538",
+    "core": true,
+    "note": "The sparsely-gated MoE layer. Routing, noise and balancing all start here."
+   },
+   {
+    "title": "Switch Transformer",
+    "authors": "Fedus, Zoph, Shazeer",
+    "year": 2021,
+    "url": "https://arxiv.org/abs/2101.03961",
+    "core": true,
+    "note": "Top-1 routing and a simple balancing loss. The easiest MoE paper to implement from."
+   },
+   {
+    "title": "DeepSeek-V3 report",
+    "authors": "DeepSeek-AI",
+    "year": 2024,
+    "url": "https://arxiv.org/abs/2412.19437",
+    "core": true,
+    "note": "Auxiliary-loss-free balancing, FP8 training and the communication engineering that made the economics work."
+   },
+   {
+    "title": "Engram: Conditional Memory via Scalable Lookup",
+    "authors": "Cheng et al., DeepSeek",
+    "year": 2026,
+    "url": "https://arxiv.org/abs/2601.07372",
+    "core": true,
+    "note": "Splits a sparse parameter budget between MoE experts and n-gram memory tables, and finds the best mix. Read with your Stage 9 byte counts in mind."
+   },
+   {
+    "title": "GShard",
+    "authors": "Lepikhin et al.",
+    "year": 2020,
+    "url": "https://arxiv.org/abs/2006.16668",
+    "core": false,
+    "note": "MoE at scale with automatic sharding and expert capacity limits."
+   },
+   {
+    "title": "Mixtral of Experts",
+    "authors": "Jiang et al.",
+    "year": 2024,
+    "url": "https://arxiv.org/abs/2401.04088",
+    "core": false,
+    "note": "An open top-2 MoE with clear active vs total parameter numbers."
+   },
+   {
+    "title": "DeepSeekMoE",
+    "authors": "Dai et al.",
+    "year": 2024,
+    "url": "https://arxiv.org/abs/2401.06066",
+    "core": false,
+    "note": "Fine-grained experts plus always-on shared experts."
+   }
+  ]
+ },
+ {
+  "n": 10,
+  "code": null,
+  "label": "Stage 10",
+  "name": "Inference at scale",
+  "weeks": "Weeks 44–47",
+  "why": "The capstone pulls everything together: bandwidth floors (Stage 8), launch overhead (7), active parameters (9) and quality checks (2). The same latency model prices serving for the video editor and the storyboard app.",
+  "serves": null,
+  "hwt": "Rented NVIDIA GPUs for serving tests; Mac for your own GPT",
+  "sec": "Serving endpoints need authentication, rate limits and spending caps, or a leaked key becomes a large bill.",
+  "tst": "Load-test the endpoint at rising request rates and alert on latency, errors and output drift.",
+  "holds": "CUDA graphs record a sequence of kernel launches and replay it as one, removing per-launch CPU overhead. At batch 1 with thousands of small kernels, that overhead is real.",
+  "breaks": "CUDA graphs remove overhead above a floor. The floor is bytes moved per token divided by memory bandwidth, set by size, precision, sharding, batch and whether the model is MoE. At bf16, 400B parameters is 800 GB of weights, more than eight 80 GB H100s hold.",
+  "project": {
+   "title": "Capstone: the comeback",
+   "brief": "Write a one-page latency model for decoding a 400B model, then validate the method on your own GPT by measuring each optimization separately.",
+   "ms": [
+    "Latency model: weight bytes, KV-cache bytes, communication, launch overhead, bandwidth floor",
+    "Measure your GPT decoding: eager vs torch.compile(mode=\"reduce-overhead\")",
+    "Add batching and report tokens/s vs batch size",
+    "Add int8 weight quantization and re-measure",
+    "Publish a waterfall chart of where each millisecond went, with your answer to the last line",
+    "Check the quantized model on your held-out eval so speed doesn’t hide a quality loss",
+    "Load-test your endpoint at rising request rates, then set alerts for latency, error rate and output drift"
+   ]
+  },
+  "predict": "Predict the speedup from CUDA graphs alone at batch 1 and at batch 64.",
+  "explain": "Give the full answer to the last line of the monologue in under 2 minutes.",
+  "revisit": "Re-read the whole monologue. Mark which regime makes each line true, and which questions it never asked.",
+  "folder": "stages/10-inference-at-scale",
+  "milestone": "Stage 10 · Inference at scale",
+  "jobs": {
+   "roles": [
+    "Inference engineer",
+    "ML platform engineer",
+    "AI capacity and FinOps analyst",
+    "TPM for model serving",
+    "Solutions architect"
+   ],
+   "work": [
+    "Cutting serving cost per million tokens with batching, quantization and speculative decoding",
+    "Planning GPU capacity for a launch against latency targets",
+    "Helping enterprise customers size and budget a self-hosted deployment"
+   ]
+  },
+  "concepts": [
+   "CUDA graphs",
+   "Decode is bandwidth-bound",
+   "KV cache",
+   "Batching",
+   "Tensor parallelism",
+   "Quantization",
+   "Speculative decoding",
+   "Monitoring & safe rollout"
+  ],
+  "readings": [
+   {
+    "title": "Efficiently Scaling Transformer Inference",
+    "authors": "Pope et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2211.05102",
+    "core": true,
+    "note": "The partitioning and latency analysis your capstone imitates. The best single paper for the last line."
+   },
+   {
+    "title": "Getting Started with CUDA Graphs",
+    "authors": "NVIDIA",
+    "year": 2019,
+    "url": "https://developer.nvidia.com/blog/cuda-graphs/",
+    "core": true,
+    "note": "Shows exactly what overhead graphs remove, with a small benchmark."
+   },
+   {
+    "title": "PagedAttention (vLLM)",
+    "authors": "Kwon et al.",
+    "year": 2023,
+    "url": "https://arxiv.org/abs/2309.06180",
+    "core": true,
+    "note": "KV-cache paging that enables much larger batches."
+   },
+   {
+    "title": "Accelerating PyTorch with CUDA Graphs",
+    "authors": "PyTorch team",
+    "year": 2021,
+    "url": "https://pytorch.org/blog/accelerating-pytorch-with-cuda-graphs/",
+    "core": false,
+    "note": "How capture and replay work in PyTorch and where they help."
+   },
+   {
+    "title": "Megatron-LM",
+    "authors": "Shoeybi et al.",
+    "year": 2019,
+    "url": "https://arxiv.org/abs/1909.08053",
+    "core": false,
+    "note": "Tensor parallelism for transformer layers."
+   },
+   {
+    "title": "Speculative decoding",
+    "authors": "Leviathan, Kalman, Matias",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2211.17192",
+    "core": false,
+    "note": "Fast inference via speculative decoding, with an exactness proof."
+   },
+   {
+    "title": "GPTQ",
+    "authors": "Frantar et al.",
+    "year": 2022,
+    "url": "https://arxiv.org/abs/2210.17323",
+    "core": false,
+    "note": "Post-training weight quantization to 3 to 4 bits."
+   }
+  ]
+ }
+]

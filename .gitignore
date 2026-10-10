@@ -1,0 +1,35 @@
+# Python and notebooks
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Data, weights and media stay out of git
+data/
+datasets/
+checkpoints/
+runs/
+wandb/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.onnx
+*.mp4
+*.mov
+*.mxf
+*.wav
+*.aif
+*.aiff
+
+# macOS
+.DS_Store
+
+# Secrets
+.env
+.env.*
+
+# The private companion repo
+private/

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Blocks commits that look like they contain secrets or very large files.
+fail=0
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  size=$(wc -c <"$f" | tr -d ' ')
+  if [ "$size" -gt 20000000 ]; then
+    echo "Blocked: $f is over 20 MB. Keep data, weights and media out of git."; fail=1
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACM)
+if git diff --cached -U0 | grep -E '^[+]' | grep -Eq '(sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{36}|hf_[A-Za-z0-9]{30,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)'; then
+  echo "Blocked: this commit looks like it contains an API key or private key. Move it to .env and try again."; fail=1
+fi
+exit $fail

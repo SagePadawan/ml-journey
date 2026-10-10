@@ -1,0 +1,58 @@
+[project]
+name = "ml-journey"
+version = "0.1.0"
+description = "A project-first path from math foundations to frontier ML systems"
+requires-python = ">=3.12,<3.13"
+# Core tools used from Stage 0 on. Add a group when a stage needs it, e.g.  uv sync --group llm
+dependencies = [
+  "numpy>=2.0",
+  "scipy",
+  "pandas",
+  "matplotlib",
+  "jupyterlab>=4",
+  "ipykernel",
+  "ipywidgets",
+  "scikit-learn",
+  "torch>=2.6",
+  "torchvision",
+  "mlx>=0.25; sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "einops",
+  "safetensors",
+  "tensorboard",
+  "tqdm",
+  "pytest",
+]
+
+[dependency-groups]
+# Track D · Ads & growth ML
+tabular = ["xgboost", "lightgbm", "statsmodels"]
+# Stage 5, Track C · post-training and LLM apps
+llm = [
+  "transformers",
+  "datasets",
+  "accelerate",
+  "peft",
+  "trl",
+  "sentence-transformers",
+  "pydantic",
+  "mlx-lm; sys_platform == 'darwin' and platform_machine == 'arm64'",
+]
+# Stage 6, Tracks A and B · vision
+vision = ["diffusers", "opencv-python", "timm", "open-clip-torch", "pillow"]
+# Track B · audio
+audio = [
+  "librosa",
+  "soundfile",
+  "mlx-whisper; sys_platform == 'darwin' and platform_machine == 'arm64'",
+]
+
+[tool.uv]
+package = false
+# Lock for your Mac and for rented Linux GPU machines.
+environments = [
+  "sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "sys_platform == 'linux' and platform_machine == 'x86_64'",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["stages"]
