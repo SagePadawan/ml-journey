@@ -1,11 +1,11 @@
 # Progress
 
 <!-- progress:start -->
-**Milestones:** 0 of 109 done · **Readings:** 0 of 143 done
+**Milestones:** 0 of 110 done · **Readings:** 0 of 143 done
 
 | # | Stage | Weeks | Milestones | Readings |
 |---|---|---|---|---|
-| Stage 0 | [Math foundations](stages/00-math-foundations/) | 1–3 | ░░░░░░░░░░ 0/6 | ░░░░░░░░░░ 0/5 |
+| Stage 0 | [Math foundations](stages/00-math-foundations/) | 1–3 | ░░░░░░░░░░ 0/7 | ░░░░░░░░░░ 0/5 |
 | Stage 1 | [Neural nets & autograd](stages/01-neural-nets-autograd/) | 4–5 | ░░░░░░░░░░ 0/5 | ░░░░░░░░░░ 0/4 |
 | Stage 2 | [Data & evaluation](stages/02-data-evaluation/) | 6–7 | ░░░░░░░░░░ 0/7 | ░░░░░░░░░░ 0/10 |
 | Track D | [Ads & growth ML](stages/track-d-ads-growth-ml/) | 8–11 | ░░░░░░░░░░ 0/7 | ░░░░░░░░░░ 0/8 |
