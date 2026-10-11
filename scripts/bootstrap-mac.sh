@@ -92,7 +92,7 @@ uv run python scripts/check_env.py || true
 git add ENVIRONMENT.md uv.lock 2>/dev/null || true
 if ! git diff --cached --quiet; then
   git commit -q -m "Record my ML environment"
-  git push -q && echo "Pushed ENVIRONMENT.md to GitHub."
+  git pull -q --rebase && git push -q && echo "Pushed ENVIRONMENT.md to GitHub."
 fi
 
 cat <<MSG

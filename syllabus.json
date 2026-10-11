@@ -20,6 +20,7 @@
     "Fit linear regression with the normal equations and with gradient descent; confirm they agree",
     "Logistic regression on a 2-class dataset using your hand-derived cross-entropy gradient",
     "Sweep 5 learning rates and plot the loss curves; find where training diverges",
+    "Apply three 2×2 matrices (a stretch, a rotation, a shear) to a grid of points and plot before and after; find each one’s eigenvectors with np.linalg.eig and check that A·v = λ·v",
     "PCA on a small dataset from the covariance matrix’s eigenvectors; plot the first two components"
    ]
   },

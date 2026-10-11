@@ -24,7 +24,8 @@ Each milestone below is a GitHub issue in the milestone **Stage 0 · Math founda
 2. Fit linear regression with the normal equations and with gradient descent; confirm they agree
 3. Logistic regression on a 2-class dataset using your hand-derived cross-entropy gradient
 4. Sweep 5 learning rates and plot the loss curves; find where training diverges
-5. PCA on a small dataset from the covariance matrix’s eigenvectors; plot the first two components
+5. Apply three 2×2 matrices (a stretch, a rotation, a shear) to a grid of points and plot before and after; find each one’s eigenvectors with np.linalg.eig and check that A·v = λ·v
+6. PCA on a small dataset from the covariance matrix’s eigenvectors; plot the first two components
 
 Put code in `code/` (tests as `test_*.py`, which run automatically on every push) and plots, tables and screenshots in `results/`. Anything with client or business data (leads, proposals, pricing, footage, transcripts, screenshots that show them) goes in `private/stages/00-math-foundations/` instead. That folder is a separate private repo and never appears here.
 
